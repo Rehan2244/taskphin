@@ -5,7 +5,13 @@ module.exports = {
   ],
   theme: {
     extend: {},
+      backgroundColor: theme => ({
+       ...theme('colors'),
+       'primary': '#1597E4',
+       'secondary': '#ffed4a',
+       'danger': '#e3342f',
+      })
+      
   },
   plugins: [],
 }
-
