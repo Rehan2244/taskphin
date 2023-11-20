@@ -11,7 +11,8 @@ interface Props {
     containerStyle?:any,
     placeholder:any,
     onChangeSecond?:any,
-    value?:any
+    value?:any,
+    value2?:any
 }
 
 interface S{
@@ -40,8 +41,8 @@ export default class CustomInput extends React.PureComponent<Props,S> {
         <div className="flex flex-col" style={this.props.containerStyle}>
             <div style={this.props.labelStyle}>{this.props.label}</div>
             <div className="flex gap-[24px]">
-                <input placeholder={this.props.placeholder} className="px-[10px] h-[36px] border rounded-[5px] focus:ring-0 focus:outline-none" style={{...this.props.inputStyle,width:'50%'}} type="text" onChange={this.props.onChange} />
-                <input value={this.props.value} placeholder={'Maximum'} className="px-[10px] h-[36px] border rounded-[5px] focus:ring-0 focus:outline-none" style={{...this.props.inputStyle,width:'50%'}} type="text" onChange={this.props.onChangeSecond} />
+                <input value={this.props.value} placeholder={this.props.placeholder} className="px-[10px] h-[36px] border rounded-[5px] focus:ring-0 focus:outline-none" style={{...this.props.inputStyle,width:'50%'}} type="text" onChange={this.props.onChange} />
+                <input value={this.props.value2} placeholder={'Maximum'} className="px-[10px] h-[36px] border rounded-[5px] focus:ring-0 focus:outline-none" style={{...this.props.inputStyle,width:'50%'}} type="text" onChange={this.props.onChangeSecond} />
             </div>
         </div>
     )
@@ -57,6 +58,7 @@ export default class CustomInput extends React.PureComponent<Props,S> {
                             type="radio"
                             className={stylesClass.common.radio.primary}
                             value={"Apply Now"}
+                            checked={this.props.value=='Apply Now'?true:false}
                         />
                         <div className={stylesClass.common.radio.checkedPrimary}>
                             <svg
@@ -79,6 +81,7 @@ export default class CustomInput extends React.PureComponent<Props,S> {
                             type="radio"
                             className={stylesClass.common.radio.primary}
                             value={"External Apply"}
+                            checked={this.props.value!='Apply Now'?true:false}
                         />
                         <div className={stylesClass.common.radio.checkedPrimary}>
                             <svg

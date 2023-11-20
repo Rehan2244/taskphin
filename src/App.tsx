@@ -16,7 +16,8 @@ interface S {
     createJobSecond:boolean,
     step:any,
     companyDetails:any,
-    jobs:any[]
+    jobs:any[],
+    deletePopupEnabled:boolean
 }
 interface SS { }
 const inputProps={
@@ -34,6 +35,20 @@ const inputProps={
     fontSize:'14px'
   },
 }
+const EmptyCompanyDetails:CompanyDetail={
+  jobTitle:'',
+  companyName:'',
+  industry:'',
+  location:'',
+  remoteType:'',
+  experienceMin:'',
+  experienceMax:'',
+  salaryMin:'',
+  salaryMax:'',
+  totalEmployee:'',
+  applyType:'',
+  id:undefined
+}
 export default class App extends CommonBlock<
     Props,
     S,
@@ -41,6 +56,7 @@ export default class App extends CommonBlock<
 > {
     constructor(props: Props) {
         super(props);
+        this.getJobsData=this.getJobsData.bind(this)
         this.state = {
           createJobFirst:false,
           header:'Header here',
@@ -57,9 +73,11 @@ export default class App extends CommonBlock<
             salaryMin:'',
             salaryMax:'',
             totalEmployee:'',
-            applyType:''
+            applyType:'',
+            id:undefined
           } as CompanyDetail,
-          jobs:[]
+          jobs:[],
+          deletePopupEnabled:false
         }
     }
     componentDidMount(): void {
@@ -121,10 +139,10 @@ export default class App extends CommonBlock<
   createAJobStep2 = () => {
     return (
       <div className="flex align-center flex-wrap" style={{ gap: '24px' }}>
-        <CustomInput label="Experience" placeholder='Minimum' {...inputProps} type="multi" onChange={(e:any)=>this.handleInput('experienceMin',e.target.value)} onChangeSecond={(e:any)=>this.handleInput('experienceMax',e.target.value)} />
-        <CustomInput label="Salary" placeholder='Minimum' {...inputProps} type="multi" onChange={(e:any)=>this.handleInput('salaryMin',e.target.value)} onChangeSecond={(e:any)=>this.handleInput('salaryMax',e.target.value)}  />
-        <CustomInput label="Total Employee" placeholder='ex. 100' {...inputProps} onChange={(e:any)=>this.handleInput('totalEmployee',e.target.value)} />
-        <CustomInput label="Apply type" placeholder='ex. Chennai' {...inputProps} type={'radio'} labelStyle={inputProps.labelStyle} containerStyle={{ gap: '4px' }} onChange={(e:any)=>this.handleInput('applyType',e.target.value)} />
+        <CustomInput value={this.state.companyDetails.salaryMin} value2={this.state.companyDetails.salaryMax} label="Experience" placeholder='Minimum' {...inputProps} type="multi" onChange={(e:any)=>this.handleInput('experienceMin',e.target.value)} onChangeSecond={(e:any)=>this.handleInput('experienceMax',e.target.value)} />
+        <CustomInput value={this.state.companyDetails.experienceMin} value2={this.state.companyDetails.experienceMax} label="Salary" placeholder='Minimum' {...inputProps} type="multi" onChange={(e:any)=>this.handleInput('salaryMin',e.target.value)} onChangeSecond={(e:any)=>this.handleInput('salaryMax',e.target.value)}  />
+        <CustomInput value={this.state.companyDetails.totalEmployee} label="Total Employee" placeholder='ex. 100' {...inputProps} onChange={(e:any)=>this.handleInput('totalEmployee',e.target.value)} />
+        <CustomInput value={this.state.companyDetails.applyType} label="Apply type" placeholder='ex. Chennai' {...inputProps} type={'radio'} labelStyle={inputProps.labelStyle} containerStyle={{ gap: '4px' }} onChange={(e:any)=>this.handleInput('applyType',e.target.value)} />
       </div>
     )
   }
@@ -140,7 +158,8 @@ export default class App extends CommonBlock<
         this.setState({createJobSecond:true,step:2})
       })
     },
-    step:1
+    step:1,
+    jobId:undefined
   }
 
   modalProps2 = {
@@ -152,15 +171,25 @@ export default class App extends CommonBlock<
         return;
       }
       this.setState({ createJobSecond: false },()=>{
-        this.apiCall('POST','',this.state.companyDetails).then(res=>{
-          if(res){
-            this.showToast('success','Successfully Added new job');
-            this.getJobsData();
-          }
-        })
+        if (this.modalProps.header == 'Create a job') {
+          this.apiCall('POST', '', this.state.companyDetails).then(res => {
+            if (res) {
+              this.showToast('success', 'Successfully Added new job');
+              this.getJobsData();
+            }
+          })
+        } else {
+          this.apiCall('PUT',data.jobId, this.state.companyDetails).then(res => {
+            if (res) {
+              this.showToast('success', 'Successfully updated the job detail');
+              this.getJobsData();
+            }
+          }) 
+        }
       })
     },
-    step:2
+    step:2,
+    jobId:undefined
   }
   getJobsData(){
     this.apiCall('GET','').then(res=>{
@@ -170,21 +199,44 @@ export default class App extends CommonBlock<
       }
     })
   }
+  editJob(data:any){
+    this.modalProps.header='Edit a job'
+    this.modalProps2.header='Edit a job'
+    this.modalProps.jobId = data.id
+    this.modalProps2.jobId = data.id
+    let companyDetails=this.state.companyDetails
+    for(let i in companyDetails){
+      companyDetails[i]=data[i]
+    }
+    this.setState({createJobFirst:true,companyDetails:companyDetails})
+  }
   render() {
     return (
-      <div className="App p-3 bg-white">
-        <button onClick={() => this.setState({ createJobFirst: true })} className={stylesClass.common.button.primary}>
-          <div className="flex gap-x-[12px]">
-            <div> Create job</div>
-            <PlusIcon className="w-5 h-5" />
-          </div>
-        </button>
+      <div className="App">
+        <div className="bg-white py-2 px-4">
+          <button onClick={() => this.setState({ createJobFirst: true }, () => {
+            this.modalProps.header = 'Create a job'
+            this.modalProps2.header = 'Create a job'
+            this.setState({ companyDetails: EmptyCompanyDetails,step:1 })
+          })} className={stylesClass.common.button.primary}>
+            <div className="flex gap-x-[12px]">
+              <div> Create job</div>
+              <PlusIcon className="w-5 h-5" />
+            </div>
+          </button>
+        </div>
         <Modal {...this.modalProps} dialogOpen={this.state.createJobFirst} />
         <Modal {...this.modalProps2} dialogOpen={this.state.createJobSecond} />
-        <div className="flex flex-wrap justify-between gap-y-[45px] gap-x-[25px]">
-          {this.state.jobs.map((el, index) => (
-            <JobCard {...el} key={index} />
-          ))}
+        <div className="flex flex-wrap justify-between gap-y-[45px] gap-x-[25px] px-4 py-2 bg-gray-200">
+          {this.state.jobs.map((el: any, index) => {
+            el.clickedDelete = (e: any) => {
+              this.setState({deletePopupEnabled:true},()=>{
+                this.setState({companyDetails:e})
+              })
+            }
+            el.clickedEdit = (e: any) => console.log(e)
+            return <JobCard {...el} key={index} clickedEdit={(data:any)=>this.editJob(data)} deleted={this.getJobsData} />
+          })}
         </div>
         <ToastContainer/>
       </div>
