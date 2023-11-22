@@ -1,4 +1,3 @@
-import React,{Fragment} from "react";
 import Modal from "./Components/ModalContainer";
 import CustomInput from "./Components/Inputs";
 import { stylesClass } from "./CommonConstant/Styles";
@@ -81,7 +80,7 @@ export default class App extends CommonBlock<
         }
     }
     componentDidMount(): void {
-        this.getJobsData();
+        this.getJobsData()
     }
     setIsOpen = (status:boolean) =>{
         this.setState({createJobFirst:status})
@@ -89,7 +88,8 @@ export default class App extends CommonBlock<
   handleInput(name:any,value:any){
     let tempState=this.state.companyDetails
     tempState[name]=value;
-    this.setState({companyDetails:tempState})
+    this.setState({companyDetails:tempState},()=>{
+    })
   }
   createJobValidation(){
     if(this.state.step==1){
@@ -139,8 +139,8 @@ export default class App extends CommonBlock<
   createAJobStep2 = () => {
     return (
       <div className="flex align-center flex-wrap" style={{ gap: '24px' }}>
-        <CustomInput value={this.state.companyDetails.salaryMin} value2={this.state.companyDetails.salaryMax} label="Experience" placeholder='Minimum' {...inputProps} type="multi" onChange={(e:any)=>this.handleInput('experienceMin',e.target.value)} onChangeSecond={(e:any)=>this.handleInput('experienceMax',e.target.value)} />
-        <CustomInput value={this.state.companyDetails.experienceMin} value2={this.state.companyDetails.experienceMax} label="Salary" placeholder='Minimum' {...inputProps} type="multi" onChange={(e:any)=>this.handleInput('salaryMin',e.target.value)} onChangeSecond={(e:any)=>this.handleInput('salaryMax',e.target.value)}  />
+        <CustomInput value={this.state.companyDetails.experienceMin} value2={this.state.companyDetails.experienceMax} label="Experience" placeholder='Minimum' {...inputProps} type="multi" onChange={(e:any)=>this.handleInput('experienceMin',e.target.value)} onChangeSecond={(e:any)=>this.handleInput('experienceMax',e.target.value)} />
+        <CustomInput value={this.state.companyDetails.salaryMin} value2={this.state.companyDetails.salaryMax} label="Salary" placeholder='Minimum' {...inputProps} type="multi" onChange={(e:any)=>this.handleInput('salaryMin',e.target.value)} onChangeSecond={(e:any)=>this.handleInput('salaryMax',e.target.value)}  />
         <CustomInput value={this.state.companyDetails.totalEmployee} label="Total Employee" placeholder='ex. 100' {...inputProps} onChange={(e:any)=>this.handleInput('totalEmployee',e.target.value)} />
         <CustomInput value={this.state.companyDetails.applyType} label="Apply type" placeholder='ex. Chennai' {...inputProps} type={'radio'} labelStyle={inputProps.labelStyle} containerStyle={{ gap: '4px' }} onChange={(e:any)=>this.handleInput('applyType',e.target.value)} />
       </div>
@@ -176,6 +176,7 @@ export default class App extends CommonBlock<
             if (res) {
               this.showToast('success', 'Successfully Added new job');
               this.getJobsData();
+              this.setState({companyDetails:EmptyCompanyDetails})
             }
           })
         } else {
@@ -194,7 +195,6 @@ export default class App extends CommonBlock<
   getJobsData(){
     this.apiCall('GET','').then(res=>{
       if(res){
-        console.log('GOT DATA',res)
         this.setState({jobs:res})
       }
     })
@@ -212,8 +212,8 @@ export default class App extends CommonBlock<
   }
   render() {
     return (
-      <div className="App">
-        <div className="bg-white py-2 px-4">
+      <div className="App bg-custom">
+        <div className={stylesClass.container.main}>
           <button onClick={() => this.setState({ createJobFirst: true }, () => {
             this.modalProps.header = 'Create a job'
             this.modalProps2.header = 'Create a job'
@@ -227,18 +227,18 @@ export default class App extends CommonBlock<
         </div>
         <Modal {...this.modalProps} dialogOpen={this.state.createJobFirst} />
         <Modal {...this.modalProps2} dialogOpen={this.state.createJobSecond} />
-        <div className="flex flex-wrap justify-between gap-y-[45px] gap-x-[25px] px-4 py-2 bg-gray-200">
+        <div className={stylesClass.container.jobCard}>
           {this.state.jobs.map((el: any, index) => {
             el.clickedDelete = (e: any) => {
               this.setState({deletePopupEnabled:true},()=>{
                 this.setState({companyDetails:e})
               })
             }
-            el.clickedEdit = (e: any) => console.log(e)
+            el.clickedEdit = (e: any) =>{}
             return <JobCard {...el} key={index} clickedEdit={(data:any)=>this.editJob(data)} deleted={this.getJobsData} />
           })}
         </div>
-        <ToastContainer/>
+        <ToastContainer />
       </div>
     );
   }

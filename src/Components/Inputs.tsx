@@ -1,5 +1,6 @@
 import React from "react";
 import { stylesClass } from "../CommonConstant/Styles";
+import CommonBlock from "./CommonBlock";
 
 interface Props {
     type?:string,
@@ -16,19 +17,40 @@ interface Props {
 }
 
 interface S{
-    value:any
+    value:any,
+    value2:any
 }
-export default class CustomInput extends React.PureComponent<Props,S> {
+interface SS{
+
+}
+export default class CustomInput extends CommonBlock<Props,S,SS> {
     value=this.props.value
     constructor(props:Props){
         super(props);
         this.state={
-            value:this.props.value
+            value:this.props.value,
+            value2:this.props.value2
         }
     }
+    labelString='Experience Salary'
+    hypenString=' -'
     changeInputValue(e:any){
+        if(!this.checkForNumber(e.target.value)  && (this.labelString.includes(this.props.label)) && e.target.value!=''){
+            return;
+        } 
+        if(!this.checkForNumberAndHyphen(e.target.value) && this.props.label=='Total Employee'){
+            return;
+        }
         this.setState({value:e.target.value},()=>{
             this.props.onChange(e);
+        })
+    }
+    changeInputValue2(e:any){
+        if(!this.checkForNumber(e.target.value) &&  (this.labelString.includes(this.props.label)) && e.target.value!=''){
+            return;
+        }
+        this.setState({value2:e.target.value},()=>{
+            this.props.onChangeSecond(e);
         })
     }
     renderTextInput=()=>(
@@ -41,8 +63,8 @@ export default class CustomInput extends React.PureComponent<Props,S> {
         <div className="flex flex-col" style={this.props.containerStyle}>
             <div style={this.props.labelStyle}>{this.props.label}</div>
             <div className="flex gap-[24px]">
-                <input value={this.props.value} placeholder={this.props.placeholder} className="px-[10px] h-[36px] border rounded-[5px] focus:ring-0 focus:outline-none" style={{...this.props.inputStyle,width:'50%'}} type="text" onChange={this.props.onChange} />
-                <input value={this.props.value2} placeholder={'Maximum'} className="px-[10px] h-[36px] border rounded-[5px] focus:ring-0 focus:outline-none" style={{...this.props.inputStyle,width:'50%'}} type="text" onChange={this.props.onChangeSecond} />
+                <input value={this.state.value} placeholder={this.props.placeholder} className="px-[10px] h-[36px] border rounded-[5px] focus:ring-0 focus:outline-none" style={{...this.props.inputStyle,width:'50%'}} type="text" onChange={(e)=>{this.changeInputValue(e)}} />
+                <input value={this.state.value2} placeholder={'Maximum'} className="px-[10px] h-[36px] border rounded-[5px] focus:ring-0 focus:outline-none" style={{...this.props.inputStyle,width:'50%'}} type="text" onChange={(e)=>{this.changeInputValue2(e)}} />
             </div>
         </div>
     )
@@ -53,12 +75,12 @@ export default class CustomInput extends React.PureComponent<Props,S> {
                 <label className="flex items-center gap-[4px]">
                     <div className="relative flex cursor-pointer items-center rounded-full">
                         <input
-                            onChange={this.props.onChange}
+                            onChange={(e)=>{this.changeInputValue(e)}}
                             name="applyType"
                             type="radio"
                             className={stylesClass.common.radio.primary}
                             value={"Apply Now"}
-                            checked={this.props.value=='Apply Now'?true:false}
+                            checked={this.state.value=='Apply Now'?true:false}
                         />
                         <div className={stylesClass.common.radio.checkedPrimary}>
                             <svg
@@ -76,12 +98,12 @@ export default class CustomInput extends React.PureComponent<Props,S> {
                 <label className="flex text-[14px] gap-[4px] items-center">
                     <div className="relative flex cursor-pointer items-center rounded-full">
                         <input
-                            onChange={this.props.onChange}
+                            onChange={(e)=>{this.changeInputValue(e)}}
                             name="applyType"
                             type="radio"
                             className={stylesClass.common.radio.primary}
                             value={"External Apply"}
-                            checked={this.props.value!='Apply Now'?true:false}
+                            checked={this.state.value!='Apply Now'?true:false}
                         />
                         <div className={stylesClass.common.radio.checkedPrimary}>
                             <svg

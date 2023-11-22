@@ -30,24 +30,17 @@ export default class Modal extends React.Component<
     setIsOpen = (status:boolean) =>{
         this.setState({isOpen:status})
     }
-    closeModal=()=>{
-    }
-
-    componentDidMount(): void {
-        console.log('Hello world',this.props)
-    }
     render() {
         return (
             <Transition appear show={this.props.dialogOpen} as={Fragment}>
-                <Dialog as="div" className="relative z-10" onClose={this.closeModal}>
+                <Dialog as="div" className="relative z-10" onClose={()=>this.setState({isOpen:false})}>
                     <Transition.Child as={Fragment} enter="ease-out duration-300" enterFrom="opacity-0" enterTo="opacity-100" leave="ease-in duration-200" leaveFrom="opacity-100" leaveTo="opacity-0">
                         <div className="fixed inset-0 bg-black/25" />
                     </Transition.Child>
-
                     <div className={stylesClass.modal.container}>
                         <div className={stylesClass.modal.subContainer}>
                             <Transition.Child as={Fragment} enter="ease-out duration-300" enterFrom="opacity-0 scale-95" enterTo="opacity-100 scale-100" leave="ease-in duration-200" leaveFrom="opacity-100 scale-100" leaveTo="opacity-0 scale-95">
-                                <Dialog.Panel className="w-full max-w-md transform overflow-hidden rounded-2xl bg-white p-[32px] text-left align-middle shadow-xl transition-all">
+                                <Dialog.Panel className={stylesClass.common.modal.panel}>
                                     <Dialog.Title as="h3" className={stylesClass.modal.title}>
                                         <div>{this.props.header}</div>{this.props.type!='delete'&&<div>Step {this.props.step}</div>}
                                     </Dialog.Title>
@@ -67,8 +60,8 @@ export default class Modal extends React.Component<
                                         </>
                                         :
                                         <div className="flex justify-evenly my-[10px]">
-                                            <button onClick={()=>this.props.closeModal(this.props)} className="button bg-rose-600 text-white py-1 px-6">Yes</button>
-                                            <button onClick={()=>this.props.closeModal(undefined)} className="button bg-teal-500 text-white py-1 px-6">No</button>
+                                            <button onClick={()=>this.props.closeModal(this.props)} className={stylesClass.common.button.delete.yes}>Yes</button>
+                                            <button onClick={()=>this.props.closeModal(undefined)} className={stylesClass.common.button.delete.no}>No</button>
                                         </div> 
                                     }
                                 </Dialog.Panel>

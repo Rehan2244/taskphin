@@ -3,6 +3,7 @@ import Modal from './ModalContainer'
 import { ReactNode, useState } from 'react'
 import App from '../App'
 import CommonBlock from './CommonBlock'
+import { stylesClass } from '../CommonConstant/Styles'
 export interface CompanyDetail{
     id?:any,
     jobTitle: string,
@@ -73,41 +74,39 @@ export default class JobCard extends CommonBlock<Prop,S,SS>{
         type:'delete'
       }
     clickedEdit=()=>{
-        console.log('data',this.props)
 
         this.props.clickedEdit(this.props)
     }
     clickedDelete=()=>{
-        console.log('data',this.props)
         this.setState({deleteModalEnabled:true})
     }
     render() {
     return(
-        <div style={{fontFamily:'poppins',flexBasis:'calc(50% - 25px)',width:'calc(50% - 25px)'}} className="relative bg-white card flex items-start gap-x-[8px] py-[16px] px-[24px] border rounded-[10px] ">
+        <div style={{fontFamily:'poppins',flexBasis:'calc(50% - 25px)',width:'calc(50% - 25px)'}} className={stylesClass.job.card}>
             <div className='max-w-[48px]'>
                 <img className="max-w-[48px] rounded-[5px]" src="assets/images/netflix.png" alt="" />
             </div>
             <div className='flex flex-col flex-1'>
                 <div className="text-[24px] w-[100%]  flex items-start justify-between">
                     <div style={{whiteSpace:'nowrap',flex:.7}} className='overflow-hidden text-ellipsis'>{this.props.jobTitle}</div>
-                    <div className='icons absolute right-[15px] flex items-center gap-[10px] flex-row-reverse'>
-                        <div title='Delete job' onClick={() => { this.clickedDelete() }} className='h-4 hover:bg-red-500 bg-red-400 px-[10px] py-[17.5px] flex items-center rounded-[50px] group text-[14px] text-white cursor-pointer'> <div className='group-hover:w-[50px] overflow-hidden transition-width ease-in-out duration-300 w-[0px]'>Delete</div> <TrashIcon className='h-4' color='white' />  </div>
-                        <div title='Edit job' onClick={() => { this.clickedEdit() }} className='group h-4 hover:bg-yellow-400 bg-yellow-300 px-[10px] py-[17.5px] flex items-center rounded-[50px] text-[14px] text-white cursor-pointer'> <div className='group-hover:w-[30px] overflow-hidden transition-width ease-in-out duration-300 w-[0px]'>Edit</div> <PencilIcon className='h-4 ' color='white' /></div>
+                    <div className={stylesClass.common.editDeleteIcon}>
+                        <div title='Delete job' onClick={() => { this.clickedDelete() }} className={stylesClass.common.icon.container}> <div className={stylesClass.common.icon.delete}>Delete</div> <TrashIcon className='h-4' color='#f87171' />  </div>
+                        <div title='Edit job' onClick={() => { this.clickedEdit() }} className={stylesClass.common.icon.container}> <div className={stylesClass.common.icon.edit}>Edit</div> <PencilIcon className='h-4 ' color='#fde047' /></div>
                     </div>
                 </div>
                 <div className="flex text-[16px] ">
                     <div>{this.props.companyName}</div>
                     <div className="px-1">-</div>
-                    <div>{this.props.industry}</div>
+                    <div >{this.props.industry}</div>
                 </div>
-                <div className="text-[16px]">{this.props.location}</div>
-                <div className="flex-col flex gap-[4px] my-[12px] text-[16px] leading-[24px]">
+                <div className="text-[16px] text-[#7A7A7A]">{this.props.location}</div>
+                <div className="flex-col flex gap-[4px] my-[24px] text-[16px] leading-[24px]">
                     <div>{this.props.remoteType}</div>
-                    <div>{'Experience ('+this.props.experienceMin+' - '+this.props.experienceMax+')'}</div>
-                    <div>{'INR (₹) '+this.props.salaryMin+' - '+this.props.salaryMax}</div>
+                    <div>{'Experience ('+this.props.experienceMin+' - '+this.props.experienceMax+' Years)'}</div>
+                    <div>{'INR (₹) '+this.formatNumberWithCommas(this.props.salaryMin,'en-US')+' - '+this.formatNumberWithCommas(this.props.salaryMax,'en-US')+' / Month'}</div>
                     <div>{this.props.totalEmployee+' employees'}</div>
                 </div>
-                <button className="self-start rounded-[6px] py-[8px] px-[16px] button bg-primary text-white">{this.props.applyType}</button>
+                <button className={this.props.applyType=='Apply Now'?stylesClass.common.button.quickApply:stylesClass.common.button.externalApply}>{this.props.applyType}</button>
             </div>
             <Modal {...this.deleteModalProps} dialogOpen={this.state.deleteModalEnabled} jobId={this.props.id}/>
         </div>
