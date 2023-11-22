@@ -92,32 +92,32 @@ export default class App extends CommonBlock<
     })
   }
   createJobValidation(){
-    if(this.state.step==1){
-      if(this.state.companyDetails.jobTitle==''){
+    if(this.state.step===1){
+      if(this.state.companyDetails.jobTitle===''){
         return {status:false,errorName:'Enter job title' }
-      } else if(this.state.companyDetails.companyName==''){
+      } else if(this.state.companyDetails.companyName===''){
         return {status:false,errorName:'Enter company name'}
-      } else if(this.state.companyDetails.industry==''){
+      } else if(this.state.companyDetails.industry===''){
         return {status:false,errorName:'Enter industry name' }
-      } else if(this.state.companyDetails.location==''){
+      } else if(this.state.companyDetails.location===''){
         return {status:false,errorName:'Enter location name' }
-      } else if(this.state.companyDetails.remoteType==''){
+      } else if(this.state.companyDetails.remoteType===''){
         return {status:false,errorName:'Enter remote type' }
       } else{
         return {status:true,errorName:'' }
       }
     } else{
-      if(this.state.companyDetails.experienceMin==''){
+      if(this.state.companyDetails.experienceMin===''){
         return {status:false,errorName:'Enter minimum experience' }
-      } else if(this.state.companyDetails.experienceMax==''){
+      } else if(this.state.companyDetails.experienceMax===''){
         return {status:false,errorName:'Enter maximum experience' }
-      } else if(this.state.companyDetails.salaryMin==''){
+      } else if(this.state.companyDetails.salaryMin===''){
         return {status:false,errorName:'Enter minimum salary' }
-      } else if(this.state.companyDetails.salaryMax==''){
+      } else if(this.state.companyDetails.salaryMax===''){
         return {status:false,errorName:'Enter maximum salary' }
-      } else if(this.state.companyDetails.totalEmployee==''){
+      } else if(this.state.companyDetails.totalEmployee===''){
         return {status:false,errorName:'Enter total employee' }
-      } else if(this.state.companyDetails.applyType==''){
+      } else if(this.state.companyDetails.applyType===''){
         return {status:false,errorName:'Enter apply type' }
       } else{
         return {status:true,errorName:'' }
@@ -171,7 +171,7 @@ export default class App extends CommonBlock<
         return;
       }
       this.setState({ createJobSecond: false },()=>{
-        if (this.modalProps.header == 'Create a job') {
+        if (this.modalProps.header === 'Create a job') {
           this.apiCall('POST', '', this.state.companyDetails).then(res => {
             if (res) {
               this.showToast('success', 'Successfully Added new job');

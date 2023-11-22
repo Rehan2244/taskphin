@@ -1,7 +1,5 @@
 import { PencilIcon,TrashIcon } from '@heroicons/react/24/solid'
 import Modal from './ModalContainer'
-import { ReactNode, useState } from 'react'
-import App from '../App'
 import CommonBlock from './CommonBlock'
 import { stylesClass } from '../CommonConstant/Styles'
 export interface CompanyDetail{
@@ -106,7 +104,7 @@ export default class JobCard extends CommonBlock<Prop,S,SS>{
                     <div>{'INR (₹) '+this.formatNumberWithCommas(this.props.salaryMin,'en-US')+' - '+this.formatNumberWithCommas(this.props.salaryMax,'en-US')+' / Month'}</div>
                     <div>{this.props.totalEmployee+' employees'}</div>
                 </div>
-                <button className={this.props.applyType=='Apply Now'?stylesClass.common.button.quickApply:stylesClass.common.button.externalApply}>{this.props.applyType}</button>
+                <button className={this.props.applyType==='Apply Now'?stylesClass.common.button.quickApply:stylesClass.common.button.externalApply}>{this.props.applyType}</button>
             </div>
             <Modal {...this.deleteModalProps} dialogOpen={this.state.deleteModalEnabled} jobId={this.props.id}/>
         </div>

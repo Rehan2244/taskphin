@@ -42,13 +42,13 @@ export default class Modal extends React.Component<
                             <Transition.Child as={Fragment} enter="ease-out duration-300" enterFrom="opacity-0 scale-95" enterTo="opacity-100 scale-100" leave="ease-in duration-200" leaveFrom="opacity-100 scale-100" leaveTo="opacity-0 scale-95">
                                 <Dialog.Panel className={stylesClass.common.modal.panel}>
                                     <Dialog.Title as="h3" className={stylesClass.modal.title}>
-                                        <div>{this.props.header}</div>{this.props.type!='delete'&&<div>Step {this.props.step}</div>}
+                                        <div>{this.props.header}</div>{this.props.type!=='delete'&&<div>Step {this.props.step}</div>}
                                     </Dialog.Title>
                                     {this.props.description}
-                                    {this.props.type!='delete'? 
+                                    {this.props.type!=='delete'? 
                                         <>
                                             <div className="pt-[96px] flex justify-end">
-                                                {this.props.step == 1 ?
+                                                {this.props.step === 1 ?
                                                     <button type="button" className={stylesClass.modal.button} onClick={this.props.closeModal} >
                                                         Next
                                                     </button> :

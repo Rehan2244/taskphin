@@ -35,10 +35,10 @@ export default class CustomInput extends CommonBlock<Props,S,SS> {
     labelString='Experience Salary'
     hypenString=' -'
     changeInputValue(e:any){
-        if(!this.checkForNumber(e.target.value)  && (this.labelString.includes(this.props.label)) && e.target.value!=''){
+        if(!this.checkForNumber(e.target.value)  && (this.labelString.includes(this.props.label)) && e.target.value!==''){
             return;
         } 
-        if(!this.checkForNumberAndHyphen(e.target.value) && this.props.label=='Total Employee'){
+        if(!this.checkForNumberAndHyphen(e.target.value) && this.props.label==='Total Employee'){
             return;
         }
         this.setState({value:e.target.value},()=>{
@@ -46,7 +46,7 @@ export default class CustomInput extends CommonBlock<Props,S,SS> {
         })
     }
     changeInputValue2(e:any){
-        if(!this.checkForNumber(e.target.value) &&  (this.labelString.includes(this.props.label)) && e.target.value!=''){
+        if(!this.checkForNumber(e.target.value) &&  (this.labelString.includes(this.props.label)) && e.target.value!==''){
             return;
         }
         this.setState({value2:e.target.value},()=>{
@@ -80,7 +80,7 @@ export default class CustomInput extends CommonBlock<Props,S,SS> {
                             type="radio"
                             className={stylesClass.common.radio.primary}
                             value={"Apply Now"}
-                            checked={this.state.value=='Apply Now'?true:false}
+                            checked={this.state.value==='Apply Now'?true:false}
                         />
                         <div className={stylesClass.common.radio.checkedPrimary}>
                             <svg
@@ -103,7 +103,7 @@ export default class CustomInput extends CommonBlock<Props,S,SS> {
                             type="radio"
                             className={stylesClass.common.radio.primary}
                             value={"External Apply"}
-                            checked={this.state.value!='Apply Now'?true:false}
+                            checked={this.state.value!=='Apply Now'?true:false}
                         />
                         <div className={stylesClass.common.radio.checkedPrimary}>
                             <svg
@@ -122,9 +122,9 @@ export default class CustomInput extends CommonBlock<Props,S,SS> {
         </div>
     )
     render() {
-        if(this.props.type=='text'){
+        if(this.props.type==='text'){
             return this.renderTextInput();
-        } else if (this.props.type=='multi'){
+        } else if (this.props.type==='multi'){
             return this.renderMultiTextInput();
         } else {
             return this.renderRadioField();

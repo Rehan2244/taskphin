@@ -7,10 +7,6 @@ export default class CommonBlock<Props, S, SS> extends React.PureComponent<
   S,
   SS
 > {
-    constructor(props:Props){
-        super(props);
-    }
-
     showToast(name:any,message:any){
         toast(message,{autoClose:3000,hideProgressBar:true,theme:'colored',type:name,closeButton:false});
     }
