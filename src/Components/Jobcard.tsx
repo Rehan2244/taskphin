@@ -80,7 +80,7 @@ export default class JobCard extends CommonBlock<Prop,S,SS>{
     }
     render() {
     return(
-        <div style={{fontFamily:'poppins',flexBasis:'calc(50% - 25px)',width:'calc(50% - 25px)'}} className={stylesClass.job.card}>
+        <div style={{fontFamily:'poppins'}} className={stylesClass.job.card}>
             <div className='max-w-[48px]'>
                 <img className="max-w-[48px] rounded-[5px]" src="assets/images/netflix.png" alt="" />
             </div>

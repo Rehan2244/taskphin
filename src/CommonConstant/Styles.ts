@@ -34,6 +34,6 @@ export const stylesClass={
         main:'bg-white py-2 px-4 flex-1'
     },
     job:{
-        card:'relative bg-white card flex items-start gap-x-[8px] py-[16px] px-[24px] border rounded-[10px] md:w-[100%]'
+        card:'relative bg-white card flex items-start gap-x-[8px] py-[16px] px-[24px] border rounded-[10px] md:w-[calc(50%-25px)] w-[100%]'
     }
 }
